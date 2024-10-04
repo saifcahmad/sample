@@ -7,7 +7,7 @@ on:
 jobs:
   MachineProvisioning:
     name: 'Windows VM Provisioning'
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     env:
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -34,14 +34,13 @@ jobs:
         terraform plan
         terraform apply -auto-approve
 
-        resource_group_location = terraform output -raw resource_group_location
-        write-host "resource_group_location : $resource_group_location"
+        terraform output -json resource_group_location.json
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: my-artifact
-        path: resource_group_location.txt
+        name: my-artifact1
+        path: resource_group_location.json
 
   ApplicationDeploy:
     name: 'Application Deployment'
