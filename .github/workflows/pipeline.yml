@@ -36,6 +36,7 @@ jobs:
         terraform apply -auto-approve
 
         resource_group_location="$(terraform output -raw resource_group_location)"
+        echo "resource_group_location : $resource_group_location"
 
         echo "::set-output name=resource_group_location::$resource_group_location"
 
