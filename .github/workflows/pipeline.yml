@@ -7,7 +7,7 @@ on:
 jobs:
   MachineProvisioning:
     name: 'Windows VM Provisioning'
-    runs-on: windows-latest
+    runs-on: linux-latest
     env:
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -21,6 +21,11 @@ jobs:
     - name: HashiCorp - Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
 
+    - name: Setup azure-cli
+      uses: pietrobolcato/install-azure-cli-action@v1.0.1
+      with:
+        azure-cli: latest
+
     - name: Terraform Apply
       id: virtual_machine_details
       run: |
@@ -29,7 +34,7 @@ jobs:
         terraform plan
         terraform apply -auto-approve
 
-        $resource_group_location = terraform output -raw resource_group_location
+        resource_group_location = terraform output -raw resource_group_location
         write-host "resource_group_location : $resource_group_location"
 
     - name: Upload artifact
