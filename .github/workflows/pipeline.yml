@@ -21,10 +21,6 @@ jobs:
     - name: HashiCorp - Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
 
-    - name: Setup azure-cli
-      uses: pietrobolcato/install-azure-cli-action@v1.0.1
-      with:
-        azure-cli: latest
     - name: Terraform Apply
       id: virtual_machine_details
       run: |
