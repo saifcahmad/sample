@@ -17,6 +17,16 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
 
     steps:
+    - name: 'Checkout code'
+      uses: actions/checkout@v4.1.4
+
+    - name: HashiCorp - Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - name: Setup azure-cli
+      uses: pietrobolcato/install-azure-cli-action@v1.0.1
+      with:
+        azure-cli: latest
     - name: Terraform Apply
       id: virtual_machine_details
       run: |
