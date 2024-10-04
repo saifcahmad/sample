@@ -20,6 +20,7 @@ jobs:
     - name: Terraform Apply
       id: virtual_machine_details
       run: |
+        cd ${{ GITHUB.workspace }}
         terraform init
         terraform plan
         terraform apply -auto-approve
