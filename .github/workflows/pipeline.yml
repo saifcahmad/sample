@@ -34,7 +34,7 @@ jobs:
         terraform plan
         terraform apply -auto-approve
 
-        terraform output -json resource_group_location.json
+        terraform output -json > resource_group_location.json
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
