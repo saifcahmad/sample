@@ -7,7 +7,7 @@ on:
 jobs:
   MachineProvisioning:
     name: 'Windows VM Provisioning'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -22,9 +22,10 @@ jobs:
       uses: hashicorp/setup-terraform@v2.0.3
 
     - name: Setup azure-cli
-      uses: pietrobolcato/install-azure-cli-action@v1.0.1
-      with:
-        azure-cli: latest
+      run: |
+        Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile azure-cli.msi
+        Start-Process msiexec.exe -ArgumentList '/i', 'azure-cli.msi', '/quiet', '/norestart' -NoNewWindow -Wait
+        Remove-Item -Force azure-cli.msi
 
     - name: Terraform Apply
       id: virtual_machine_details
@@ -34,7 +35,8 @@ jobs:
         terraform plan
         terraform apply -auto-approve
 
-        terraform output -json > resource_group_location.json
+        $resource_group_location = terraform output -raw resource_group_location
+        write-host "resource_group_location : $resource_group_location"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
